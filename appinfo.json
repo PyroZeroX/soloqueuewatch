@@ -1,0 +1,22 @@
+{
+    "versionLabel": "1.0",
+    "uuid": "4c6da1ba-6b81-4d38-b118-06062be37a89",
+    "appKeys": {
+        "player": 0,
+        "winloss": 2,
+        "rank": 1
+    },
+    "longName": "SoloQDisplay",
+    "versionCode": 1,
+    "capabilities": [
+        "configurable"
+    ],
+    "shortName": "SoloQDisplay",
+    "companyName": "PyroZeroX",
+    "watchapp": {
+        "watchface": false
+    },
+    "resources": {
+        "media": []
+    }
+}
