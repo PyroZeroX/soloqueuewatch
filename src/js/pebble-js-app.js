@@ -57,14 +57,23 @@ function fetchSummonerDetails(server, summonerId) {
                         //find the player mentioned
                         if (leagueStatsResponse.entries.array[i]["playerOrTeamName"] == localStorage["summonerName"].replace("+", " ")) 
                         {
-
-                            //transform into formatted JSON
-                            JSONWatchResponse = JSON.stringify({
-                                player: leagueStatsResponse.entries.array[i]["playerOrTeamName"],
-                                rank: leagueStatsResponse.entries.array[i]["tier"] + " " + leagueStatsResponse.entries.array[i]["rank"] + "(" + leagueStatsResponse.entries.array[i]["leaguePoints"] + " LP)",
-                                league: leagueStatsResponse.entries.array[i]["leagueName"],
-                                winloss: "W: " + leagueStatsResponse.entries.array[i]["wins"] + " - L: " + leagueStatsResponse.entries.array[i]["losses"]
-                            });
+							//var icon = 0;
+							//switch(leagueStatsResponse.entries.array[i]["tier"])
+							//{
+								//case "BRONZE": icon = 0; break;
+								//case "SILVER": icon = 1; break;
+								//case "GOLD": icon = 2; break;
+								//case "PLATINUM": icon = 3; break;
+								//case "DIAMOND": icon = 4; break;
+								//case "CHALLENGER": icon = 5; break;
+							//}
+							
+							Pebble.sendAppMessage(
+							{
+								"player": leagueStatsResponse.entries.array[i]["playerOrTeamName"],
+								"rank": leagueStatsResponse.entries.array[i]["tier"] + " " + leagueStatsResponse.entries.array[i]["rank"] + "(" + leagueStatsResponse.entries.array[i]["leaguePoints"] + " LP)",
+								"winloss": "W: " + leagueStatsResponse.entries.array[i]["wins"] + " - L: " + leagueStatsResponse.entries.array[i]["losses"]
+							});
                             break;
 							
 							//
@@ -78,14 +87,7 @@ function fetchSummonerDetails(server, summonerId) {
 							//
                         }
                     }
-                    console.log(JSONWatchResponse);
-                    Pebble.sendAppMessage(
-                    {
-                        "player": leagueStatsResponse.entries.array[i]["playerOrTeamName"],
-                        "rank": leagueStatsResponse.entries.array[i]["tier"] + " " + leagueStatsResponse.entries.array[i]["rank"] + "(" + leagueStatsResponse.entries.array[i]["leaguePoints"] + " LP)",
-                        "winloss": "W: " + leagueStatsResponse.entries.array[i]["wins"] + " - L: " + leagueStatsResponse.entries.array[i]["losses"],
-						"league": leagueStatsResponse.entries.array[i]["leagueName"]
-                    });
+                    
                 }
                 else 
                 {
@@ -123,8 +125,7 @@ Pebble.addEventListener("ready",
 			{
 				"player": "Error!",
 				 "rank": "Please configure",
-				 "winloss": "on Pebble App",
-				 "league": ""
+				 "winloss": "on Pebble App"
 				});
 			
 		}

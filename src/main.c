@@ -3,6 +3,9 @@ static Window *window;
 static TextLayer *player_layer;
 static TextLayer *rank_layer;
 static TextLayer *winloss_layer;
+//static BitmapLayer *icon_layer;
+//static GBitmap *icon_bitmap = NULL;
+
 
 static AppSync sync;
 static uint8_t sync_buffer[64];
@@ -11,6 +14,16 @@ enum LoLKey {
   LOL_PLAYER_KEY = 0x0,         // TUPLE_CSTRING
   LOL_RANK_KEY = 0x1,  			// TUPLE_CSTRING
   LOL_WINLOSS_KEY = 0x2,        // TUPLE_CSTRING
+};
+
+static const uint32_t LOL_ICONS[] =
+{
+	RESOURCE_ID_IMAGE_BRONZE, 		//0
+	RESOURCE_ID_IMAGE_SILVER, 		//1
+	RESOURCE_ID_IMAGE_GOLD, 		//2
+	RESOURCE_ID_IMAGE_PLATINUM, 	//3
+	RESOURCE_ID_IMAGE_DIAMOND, 		//4
+	RESOURCE_ID_IMAGE_CHALLENGER 	//5
 };
 
 static void sync_error_callback(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
@@ -25,9 +38,15 @@ static void sync_tuple_changed_callback(const uint32_t key, const Tuple* new_tup
       break;
 
     case LOL_RANK_KEY:
+	  //if(icon_bitmap)
+	  //{
+		//gbitmap_destroy(icon_bitmap);
+      //} 
+	  //icon_bitmap = gbitmap_create_with_resource(LOL_ICONS[0]);
+      //bitmap_layer_set_bitmap(icon_layer, icon_bitmap);
       text_layer_set_text(rank_layer, new_tuple->value->cstring);
       break;
-
+	  
     case LOL_WINLOSS_KEY:
       text_layer_set_text(winloss_layer, new_tuple->value->cstring);
       break;
@@ -35,7 +54,7 @@ static void sync_tuple_changed_callback(const uint32_t key, const Tuple* new_tup
 }
 
 static void send_cmd(void) {
-  Tuplet value = TupletInteger(4, 1);
+  Tuplet value = TupletInteger(5, 1);
 
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
@@ -53,14 +72,17 @@ static void send_cmd(void) {
 static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   //self reminder: GRect(x, y, width, height)
-  
+  //device is 144 x 168
   //A few variables to help space things and maintain uniformity
   static int x_offset = 2;
   static int y_spacer = 20;
   static int line_width = 140;
+
+  //icon_layer = bitmap_layer_create(GRect(32, 10, 80, 80));
+  //layer_add_child(window_layer, bitmap_layer_get_layer(icon_layer));
 	
   //player name text layer (for LOL_PLAYER_KEY)
-  player_layer = text_layer_create(GRect(x_offset, 40, line_width, 50));
+  player_layer = text_layer_create(GRect(x_offset, 55, line_width, 50));
   text_layer_set_text_color(player_layer, GColorBlack);
   text_layer_set_background_color(player_layer, GColorClear);
   text_layer_set_font(player_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
@@ -68,7 +90,7 @@ static void window_load(Window *window) {
   layer_add_child(window_layer, text_layer_get_layer(player_layer));
 
   //rank text layer, for tier, division and LP information
-  rank_layer = text_layer_create(GRect(x_offset, 60+y_spacer, line_width, 20));
+  rank_layer = text_layer_create(GRect(x_offset, 65+y_spacer, line_width, 20));
   text_layer_set_text_color(rank_layer, GColorBlack);
   text_layer_set_background_color(rank_layer, GColorClear);
   text_layer_set_font(rank_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
@@ -76,7 +98,7 @@ static void window_load(Window *window) {
   layer_add_child(window_layer, text_layer_get_layer(rank_layer));
 	
   //win loss text layer for game record information
-  winloss_layer = text_layer_create(GRect(x_offset, 80+y_spacer, line_width, 15));
+  winloss_layer = text_layer_create(GRect(x_offset, 85+y_spacer, line_width, 15));
   text_layer_set_text_color(winloss_layer, GColorBlack);
   text_layer_set_background_color(winloss_layer, GColorClear);
   text_layer_set_font(winloss_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
@@ -96,10 +118,15 @@ static void window_load(Window *window) {
 
 static void window_unload(Window *window) {
   //pack it up
+  //if (icon_bitmap) {
+    //gbitmap_destroy(icon_bitmap);
+  //}
+	
   app_sync_deinit(&sync);
   text_layer_destroy(player_layer);
   text_layer_destroy(rank_layer);
   text_layer_destroy(winloss_layer);
+  //bitmap_layer_destroy(icon_layer);
 }
 
 static void init(void) {

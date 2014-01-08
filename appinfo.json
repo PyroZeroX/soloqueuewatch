@@ -1,5 +1,5 @@
 {
-    "versionLabel": "1.0",
+    "versionLabel": "1.1",
     "uuid": "4c6da1ba-6b81-4d38-b118-06062be37a89",
     "appKeys": {
         "player": 0,
@@ -17,6 +17,37 @@
         "watchface": false
     },
     "resources": {
-        "media": []
+        "media": [
+            {
+                "type": "png",
+                "name": "IMAGE_BRONZE",
+                "file": "images/bronze.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_CHALLENGER",
+                "file": "images/none.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_PLATINUM",
+                "file": "images/platinum.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_DIAMOND",
+                "file": "images/diamond.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_GOLD",
+                "file": "images/gold.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_SILVER",
+                "file": "images/silver.png"
+            }
+        ]
     }
 }
