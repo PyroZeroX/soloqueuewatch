@@ -1,6 +1,5 @@
 #include "pebble.h"
 static Window *window;
-
 static TextLayer *player_layer;
 static TextLayer *rank_layer;
 static TextLayer *winloss_layer;
@@ -58,10 +57,10 @@ static void window_load(Window *window) {
   //A few variables to help space things and maintain uniformity
   static int x_offset = 2;
   static int y_spacer = 20;
-  static int line_width = 130;
+  static int line_width = 140;
 	
   //player name text layer (for LOL_PLAYER_KEY)
-  player_layer = text_layer_create(GRect(x_offset, 80, line_width, 50));
+  player_layer = text_layer_create(GRect(x_offset, 40, line_width, 50));
   text_layer_set_text_color(player_layer, GColorBlack);
   text_layer_set_background_color(player_layer, GColorClear);
   text_layer_set_font(player_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
@@ -69,15 +68,15 @@ static void window_load(Window *window) {
   layer_add_child(window_layer, text_layer_get_layer(player_layer));
 
   //rank text layer, for tier, division and LP information
-  rank_layer = text_layer_create(GRect(x_offset, 100+y_spacer, line_width, 20));
+  rank_layer = text_layer_create(GRect(x_offset, 60+y_spacer, line_width, 20));
   text_layer_set_text_color(rank_layer, GColorBlack);
   text_layer_set_background_color(rank_layer, GColorClear);
   text_layer_set_font(rank_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   text_layer_set_text_alignment(rank_layer, GTextAlignmentCenter);
   layer_add_child(window_layer, text_layer_get_layer(rank_layer));
-
+	
   //win loss text layer for game record information
-  winloss_layer = text_layer_create(GRect(x_offset, 120+y_spacer, line_width, 15));
+  winloss_layer = text_layer_create(GRect(x_offset, 80+y_spacer, line_width, 15));
   text_layer_set_text_color(winloss_layer, GColorBlack);
   text_layer_set_background_color(winloss_layer, GColorClear);
   text_layer_set_font(winloss_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
@@ -88,7 +87,7 @@ static void window_load(Window *window) {
   Tuplet initial_values[] = {
     TupletCString(LOL_PLAYER_KEY, "Solo Q Stats"),
     TupletCString(LOL_RANK_KEY, "--LOADING--"),
-    TupletCString(LOL_WINLOSS_KEY, "Please wait..."), 
+    TupletCString(LOL_WINLOSS_KEY, "Please wait..."),
   };
 
   app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values, ARRAY_LENGTH(initial_values), sync_tuple_changed_callback, sync_error_callback, NULL);

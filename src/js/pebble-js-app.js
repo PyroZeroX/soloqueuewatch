@@ -61,20 +61,30 @@ function fetchSummonerDetails(server, summonerId) {
                             //transform into formatted JSON
                             JSONWatchResponse = JSON.stringify({
                                 player: leagueStatsResponse.entries.array[i]["playerOrTeamName"],
-                                rank: leagueStatsResponse.entries.array[i]["tier"] + leagueStatsResponse.entries.array[i]["rank"] + "(" + leagueStatsResponse.entries.array[i]["leaguePoints"] + " LP)",
+                                rank: leagueStatsResponse.entries.array[i]["tier"] + " " + leagueStatsResponse.entries.array[i]["rank"] + "(" + leagueStatsResponse.entries.array[i]["leaguePoints"] + " LP)",
                                 league: leagueStatsResponse.entries.array[i]["leagueName"],
                                 winloss: "W: " + leagueStatsResponse.entries.array[i]["wins"] + " - L: " + leagueStatsResponse.entries.array[i]["losses"]
                             });
                             break;
+							
+							//
+                            //things you could use
+							//----
+                            //demotionWarning
+                            //displayDecayWarning
+                            //hotStreak
+                            //timeUntilDecay
+							//veteran
+							//
                         }
                     }
                     console.log(JSONWatchResponse);
                     Pebble.sendAppMessage(
                     {
                         "player": leagueStatsResponse.entries.array[i]["playerOrTeamName"],
-                        "rank": leagueStatsResponse.entries.array[i]["tier"] + leagueStatsResponse.entries.array[i]["rank"] + "(" + leagueStatsResponse.entries.array[i]["leaguePoints"] + " LP)",
-                        "league": leagueStatsResponse.entries.array[i]["leagueName"],
-                        "winloss": "W: " + leagueStatsResponse.entries.array[i]["wins"] + " - L: " + leagueStatsResponse.entries.array[i]["losses"]
+                        "rank": leagueStatsResponse.entries.array[i]["tier"] + " " + leagueStatsResponse.entries.array[i]["rank"] + "(" + leagueStatsResponse.entries.array[i]["leaguePoints"] + " LP)",
+                        "winloss": "W: " + leagueStatsResponse.entries.array[i]["wins"] + " - L: " + leagueStatsResponse.entries.array[i]["losses"],
+						"league": leagueStatsResponse.entries.array[i]["leagueName"]
                     });
                 }
                 else 
@@ -105,10 +115,19 @@ Pebble.addEventListener("ready",
         {
           fetchSummonerId(localStorage["server"], localStorage["summonerName"].replace("+", " "));
         }
-        
-        //otherwise we should display something to the user to tell them what to do =///
-		//I'll work this out later TODO!!
-
+		else
+		{
+			//otherwise we should display something to the user to tell them what to do =///
+			//I'll work this out later TODO!!
+			Pebble.sendAppMessage(
+			{
+				"player": "Error!",
+				 "rank": "Please configure",
+				 "winloss": "on Pebble App",
+				 "league": ""
+				});
+			
+		}
     });
 
 
@@ -119,7 +138,7 @@ Pebble.addEventListener("showConfiguration", function () {
     {
         Pebble.openURL('http://pyrozerox.com/lolpebble/configurable.html?name='+localStorage["summonerName"]+"&server="+localStorage["server"]);
     }
-    else Pebble.openURL('http://pyrozerox.com/lolpebble/configurable.html?name=pyrozerox&server=oce');
+    else Pebble.openURL('http://pyrozerox.com/lolpebble/configurable.html');
     
 });
 
@@ -133,12 +152,10 @@ Pebble.addEventListener("webviewclosed", function (e) {
     //save the returned content for future reference
     localStorage.setItem("summonerName", summoner);
     localStorage.setItem("server", options.server);
-    Pebble.sendAppMessage({
-                    "player": options.summoner,
-                    "rank" : "Getting Summoner details",
-                    "winloss" : "Please wait..."
-                });
-
+	
     //use the data!
-    fetchSummonerId(localStorage["server"], localStorage["summonerName"].replace("+", " "));
+	if(localStorage["server"] && localStorage["summonerName"])
+	{
+		fetchSummonerId(localStorage["server"], localStorage["summonerName"]);	
+	}
 });
